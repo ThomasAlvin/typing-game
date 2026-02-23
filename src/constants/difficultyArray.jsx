@@ -1,0 +1,43 @@
+const difficultyArray = [
+  {
+    label: "Easy",
+    value: "easy",
+    wordVelocity: 0.8,
+    wordSpawnRate: 2500,
+    suggestedMinWpm: 20,
+    suggestedMaxWpm: 40,
+    wordGenerationMinLength: 3,
+    wordGenerationMaxLength: 8,
+  },
+  {
+    label: "Medium",
+    value: "medium",
+    wordVelocity: 1,
+    wordSpawnRate: 2000,
+    suggestedMinWpm: 30,
+    suggestedMaxWpm: 50,
+    wordGenerationMinLength: 4,
+    wordGenerationMaxLength: 10,
+  },
+  {
+    label: "Hard",
+    value: "hard",
+    wordVelocity: 1.5,
+    wordSpawnRate: 1500,
+    suggestedMinWpm: 40,
+    suggestedMaxWpm: 60,
+    wordGenerationMinLength: 5,
+    wordGenerationMaxLength: 12,
+  },
+  {
+    label: "Typing Maniac",
+    value: "typingManiac",
+    wordVelocity: 1.8,
+    wordSpawnRate: 1200,
+    suggestedMinWpm: 60,
+    suggestedMaxWpm: 80,
+    wordGenerationMinLength: 6,
+    wordGenerationMaxLength: 100,
+  },
+];
+export default difficultyArray;
