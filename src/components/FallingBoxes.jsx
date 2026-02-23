@@ -41,8 +41,6 @@ export default function FallingBoxes() {
   }, [selectedDifficulty, isPaused, isGameOver]);
 
   useEffect(() => {
-    console.log("ke triggered");
-
     let lastTimestamp = null;
     function animate(timestamp) {
       if (isPaused) {

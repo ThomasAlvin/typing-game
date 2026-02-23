@@ -2,21 +2,24 @@ import { Button, CloseButton, Dialog, Flex, Portal } from "@chakra-ui/react";
 import { useState } from "react";
 import { useGameStore } from "../stores/gameStore";
 
-export default function GameOverPopup() {
+export default function GameOverDialog() {
   const isGameOver = useGameStore((state) => state.gameState) === "gameOver";
   const resetGame = useGameStore((state) => state.resetGame);
+  const score = useGameStore((state) => state.score);
   const setCurrentPage = useGameStore((state) => state.setCurrentPage);
   return (
-    <Dialog.Root lazyMount open={isGameOver}>
+    <Dialog.Root placement={"center"} lazyMount open={isGameOver}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
-              <Dialog.Title>Dialog Title</Dialog.Title>
+              <Dialog.Title>Game Over</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-              <Flex>Game Over</Flex>
+              <Flex fontSize={"32px"} fontWeight={700}>
+                Final Score: {score}
+              </Flex>
             </Dialog.Body>
             <Dialog.Footer>
               <Dialog.ActionTrigger asChild>
@@ -27,7 +30,7 @@ export default function GameOverPopup() {
                   Back to main menu
                 </Button>
               </Dialog.ActionTrigger>
-              <Button onClick={resetGame}>Retry</Button>
+              <Button onClick={() => resetGame()}>Retry</Button>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
               <CloseButton size="sm" />

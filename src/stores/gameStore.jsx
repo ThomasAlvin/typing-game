@@ -7,17 +7,27 @@ export const useGameStore = create((set, get) => ({
   boxes: [],
   score: 0,
   selectedDifficulty: "easy",
-  lives: 1,
+  lives: 3,
   gameState: null, // can be either: gamePlay,gameOver or paused
 
   // actions
   setCurrentPage: (value) => set({ currentPage: value }),
-  setTypingInput: (value) => set({ typingInput: value }),
+  setTypingInput: (valueOrUpdater) =>
+    set((state) => ({
+      typingInput:
+        typeof valueOrUpdater === "function"
+          ? valueOrUpdater(state.typingInput)
+          : valueOrUpdater,
+    })),
   setBoxes: (value) => set({ boxes: value }),
   setDifficulty: (difficulty) => {
-    get().resetGame();
+    get().resetGame(difficulty.startingLives);
     set({ selectedDifficulty: difficulty, currentPage: "gamePlay" });
   },
+  togglePauseGame: () =>
+    set((state) => ({
+      gameState: state.gameState === "paused" ? "gamePlay" : "paused",
+    })),
   addScore: (value) => set((state) => ({ score: state.score + value })),
   addBox: (boxOrBoxes) =>
     set((state) => {
@@ -66,13 +76,14 @@ export const useGameStore = create((set, get) => ({
     set((state) => ({ boxes: state.boxes.filter((box) => box.id !== boxId) })),
   setScore: (value) => set({ score: value }),
   setSelectedDifficulty: (value) => set({ selectedDifficulty: value }),
-
-  resetGame: () =>
-    set({
-      typingInput: "",
-      boxes: [],
-      score: 0,
-      lives: 3,
-      gameState: "gamePlay",
+  resetGame: (startingLives) =>
+    set((state) => {
+      return {
+        typingInput: "",
+        boxes: [],
+        score: 0,
+        lives: startingLives || state?.selectedDifficulty?.startingLives,
+        gameState: "gamePlay",
+      };
     }),
 }));

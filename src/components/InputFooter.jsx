@@ -1,28 +1,23 @@
 import { Flex, Input } from "@chakra-ui/react";
 import { useGameStore } from "../stores/gameStore";
+import { useEffect } from "react";
 
 export default function InputFooter() {
   const markBoxForRemoval = useGameStore((state) => state.markBoxForRemoval);
   const removeBox = useGameStore((state) => state.removeBox);
   const addScore = useGameStore((state) => state.addScore);
   const boxes = useGameStore((state) => state.boxes);
+  const togglePauseGame = useGameStore((state) => state.togglePauseGame);
   const typingInput = useGameStore((state) => state.typingInput);
   const setTypingInput = useGameStore((state) => state.setTypingInput);
 
-  function inputHandler(event) {
-    const { value } = event.target;
-    setTypingInput(value.toUpperCase());
-  }
-  function onKeyDownHandler(e) {
-    console.log(e.key);
-
-    if (e.key === "Enter" || e.key === " ") {
-      submitWord();
-    }
-  }
   function submitWord() {
+    console.log(typingInput);
+
     setTypingInput(""); // Clear input
     const selectedBoxId = boxes.find((box) => box.word === typingInput)?.id;
+    console.log(boxes);
+    console.log(selectedBoxId);
     markBoxForRemoval(selectedBoxId);
 
     // Delay actual removal
@@ -31,6 +26,34 @@ export default function InputFooter() {
       addScore(100);
     }, 300); // Duration matches CSS animation time
   }
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        submitWord();
+        return;
+      }
+      if (e.key === "Escape" || e.key === " ") {
+        togglePauseGame();
+        return;
+      }
+
+      if (e.key === "Backspace") {
+        setTypingInput((prev) => prev.slice(0, -1));
+        return;
+      }
+
+      if (e.key.length === 1) {
+        console.log(e.key);
+        setTypingInput((prev) => prev + e.key.toUpperCase());
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [submitWord]);
 
   return (
     <Flex
@@ -52,8 +75,9 @@ export default function InputFooter() {
         alignItems={"center"}
       >
         <Input
-          onKeyDown={onKeyDownHandler}
-          onChange={inputHandler}
+          _placeholder={{ color: "white" }}
+          placeholder="Enter the falling words then press Enter or Space..."
+          readOnly
           value={typingInput}
           bg={"#dc143c"}
           color={"white"}

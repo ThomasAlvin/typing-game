@@ -8,6 +8,7 @@ const difficultyArray = [
     suggestedMaxWpm: 40,
     wordGenerationMinLength: 3,
     wordGenerationMaxLength: 8,
+    startingLives: 3,
   },
   {
     label: "Medium",
@@ -18,6 +19,7 @@ const difficultyArray = [
     suggestedMaxWpm: 50,
     wordGenerationMinLength: 4,
     wordGenerationMaxLength: 10,
+    startingLives: 3,
   },
   {
     label: "Hard",
@@ -28,6 +30,7 @@ const difficultyArray = [
     suggestedMaxWpm: 60,
     wordGenerationMinLength: 5,
     wordGenerationMaxLength: 12,
+    startingLives: 3,
   },
   {
     label: "Typing Maniac",
@@ -38,6 +41,7 @@ const difficultyArray = [
     suggestedMaxWpm: 80,
     wordGenerationMinLength: 6,
     wordGenerationMaxLength: 100,
+    startingLives: 1,
   },
 ];
 export default difficultyArray;

@@ -12,6 +12,7 @@ import FallingBoxes from "../components/FallingBoxes";
 import LeftSidebar from "../components/LeftSidebar";
 import { useGameStore } from "../stores/gameStore";
 import difficultyArray from "../constants/difficultyArray";
+import { FaArrowLeftLong } from "react-icons/fa6";
 export default function HomePage() {
   const currentPage = useGameStore((state) => state.currentPage);
 
@@ -116,6 +117,7 @@ function GamePlayPage() {
 }
 function SelectDifficultyPage() {
   const setDifficulty = useGameStore((state) => state.setDifficulty);
+  const setCurrentPage = useGameStore((state) => state.setCurrentPage);
   return (
     <Flex
       flexDir={"column"}
@@ -146,6 +148,28 @@ function SelectDifficultyPage() {
               </Button>
             </motion.div>
           ))}{" "}
+          <motion.div
+            initial={{ y: "20vw" }} // start far left
+            animate={{ y: 0 }} // move to center
+            transition={{
+              type: "spring",
+              stiffness: 120, // controls bounce speed
+              damping: 15, // lower = more bounce
+            }}
+          >
+            <Button
+              onClick={() => setCurrentPage("start")}
+              fontSize={"20px"}
+              w={"160px"}
+              alignItems={"center"}
+              gap={"10px"}
+            >
+              <Flex mt={"2px"}>
+                <FaArrowLeftLong />
+              </Flex>
+              <Flex>Back</Flex>
+            </Button>
+          </motion.div>
         </Flex>
       </Flex>
     </Flex>

@@ -1,7 +1,8 @@
 import { Button, Flex } from "@chakra-ui/react";
 import { useGameStore } from "../stores/gameStore";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
-import GameOverPopup from "./GameOverPopup";
+import GameOverDialog from "./GameOverDialog";
+import GamePlayMenuDialog from "./GamePlayMenuDialog";
 // import SelectDifficultyModal from "./SelectDifficultyModal";
 
 export default function LeftSidebar() {
@@ -55,9 +56,9 @@ export default function LeftSidebar() {
           {selectedDifficulty.label}
         </Flex>
         <Flex w={"100%"} px={"16px"} py={"8px"}>
-          <Button w={"100%"}>Menu</Button>
+          <GamePlayMenuDialog />
         </Flex>
-        <Flex w={"100%"} px={"16px"} py={"8px"}>
+        {/* <Flex w={"100%"} px={"16px"} py={"8px"}>
           <Button
             onClick={() => {
               console.log(boxes);
@@ -66,9 +67,8 @@ export default function LeftSidebar() {
           >
             Log Boxes
           </Button>
-        </Flex>
-        <Flex>{gameState}</Flex>
-        <GameOverPopup />
+        </Flex> */}
+        <GameOverDialog />
       </Flex>
     </Flex>
   );
