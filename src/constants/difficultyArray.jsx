@@ -2,7 +2,7 @@ const difficultyArray = [
   {
     label: "Easy",
     value: "easy",
-    wordVelocity: 0.8,
+    wordVelocity: 0.6,
     wordSpawnRate: 2500,
     suggestedMinWpm: 20,
     suggestedMaxWpm: 40,
@@ -13,7 +13,7 @@ const difficultyArray = [
   {
     label: "Medium",
     value: "medium",
-    wordVelocity: 1,
+    wordVelocity: 0.7,
     wordSpawnRate: 2000,
     suggestedMinWpm: 30,
     suggestedMaxWpm: 50,
@@ -24,7 +24,7 @@ const difficultyArray = [
   {
     label: "Hard",
     value: "hard",
-    wordVelocity: 1.2,
+    wordVelocity: 0.8,
     wordSpawnRate: 1500,
     suggestedMinWpm: 40,
     suggestedMaxWpm: 60,
@@ -35,7 +35,7 @@ const difficultyArray = [
   {
     label: "Typing Maniac",
     value: "typingManiac",
-    wordVelocity: 1.2,
+    wordVelocity: 0.8,
     wordSpawnRate: 1200,
     suggestedMinWpm: 60,
     suggestedMaxWpm: 80,
