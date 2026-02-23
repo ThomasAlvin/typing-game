@@ -35,8 +35,8 @@ const difficultyArray = [
   {
     label: "Typing Maniac",
     value: "typingManiac",
-    wordVelocity: 1.8,
-    wordSpawnRate: 1200,
+    wordVelocity: 1.2,
+    wordSpawnRate: 1100,
     suggestedMinWpm: 60,
     suggestedMaxWpm: 80,
     wordGenerationMinLength: 6,
