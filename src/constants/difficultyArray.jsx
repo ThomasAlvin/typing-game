@@ -39,7 +39,7 @@ const difficultyArray = [
     wordSpawnRate: 1200,
     suggestedMinWpm: 60,
     suggestedMaxWpm: 80,
-    wordGenerationMinLength: 6,
+    wordGenerationMinLength: 5,
     wordGenerationMaxLength: 100,
     startingLives: 1,
   },

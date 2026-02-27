@@ -7,38 +7,86 @@ import { v4 as uuid } from "uuid";
 
 export default function FallingBoxes() {
   const boxes = useGameStore((state) => state.boxes);
+  const submitCorrectWord = useGameStore((state) => state.submitCorrectWord);
   const addBox = useGameStore((state) => state.addBox);
   const tickBoxes = useGameStore((state) => state.tickBoxes);
   const typingInput = useGameStore((state) => state.typingInput);
   const selectedDifficulty = useGameStore((state) => state.selectedDifficulty);
-  const wordVelocity = selectedDifficulty.wordVelocity;
-  const wordSpawnRate = selectedDifficulty.wordSpawnRate;
   const gameState = useGameStore((state) => state.gameState);
   const containerRef = useRef();
   const animationRef = useRef();
   const isPaused = gameState === "paused";
   const isGameOver = gameState === "gameOver";
+  const timeoutRef = useRef(null);
+  const startTimeRef = useRef(null);
+  const remainingTimeRef = useRef(selectedDifficulty.wordSpawnRate);
+  const spawnRateRef = useRef(selectedDifficulty.wordSpawnRate);
+  function spawnBox() {
+    addBox({
+      id: uuid(),
+      top: 0,
+      velocity: selectedDifficulty.wordVelocity,
+      word: generate({
+        minLength: selectedDifficulty.wordGenerationMinLength,
+        maxLength: selectedDifficulty.wordGenerationMaxLength,
+      }).toUpperCase(),
+      left: Math.random() * 90 + 5,
+    });
+  }
+  function scheduleSpawn(delay) {
+    startTimeRef.current = Date.now();
 
-  // Create a box every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (isPaused || isGameOver) {
-        return; // skip updating positions if paused
+    timeoutRef.current = setTimeout(() => {
+      spawnBox();
+
+      // reset remaining time for next cycle
+      remainingTimeRef.current = spawnRateRef.current;
+
+      if (!isPaused && !isGameOver) {
+        scheduleSpawn(spawnRateRef.current);
       }
-      addBox({
-        id: uuid(),
-        top: 0,
-        velocity: wordVelocity,
-        word: generate({
-          minLength: selectedDifficulty.wordGenerationMinLength,
-          maxLength: selectedDifficulty.wordGenerationMaxLength,
-        }).toUpperCase(),
-        left: Math.random() * 90 + 5, // random left in %
-      });
-    }, wordSpawnRate);
+    }, delay);
+  }
+  useEffect(() => {
+    if (isGameOver) {
+      clearTimeout(timeoutRef.current);
+      return;
+    }
 
-    return () => clearInterval(interval);
-  }, [selectedDifficulty, isPaused, isGameOver]);
+    if (isPaused) {
+      clearTimeout(timeoutRef.current);
+
+      const elapsed = Date.now() - startTimeRef.current;
+      remainingTimeRef.current -= elapsed;
+    } else {
+      scheduleSpawn(remainingTimeRef.current);
+    }
+
+    return () => clearTimeout(timeoutRef.current);
+  }, [isPaused, isGameOver]);
+  useEffect(() => {
+    spawnRateRef.current = selectedDifficulty.wordSpawnRate;
+  }, [selectedDifficulty.wordSpawnRate]);
+  // Old method, Create a box every 5 seconds, main problem: everytime spawnrate changes, it resets the timer and when the game pauses, it doesnt resume from the spawntime correctly
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (isPaused || isGameOver) {
+  //       return; // skip updating positions if paused
+  //     }
+  //     addBox({
+  //       id: uuid(),
+  //       top: 0,
+  //       velocity: selectedDifficulty.wordVelocity,
+  //       word: generate({
+  //         minLength: selectedDifficulty.wordGenerationMinLength,
+  //         maxLength: selectedDifficulty.wordGenerationMaxLength,
+  //       }).toUpperCase(),
+  //       left: Math.random() * 90 + 5, // random left in %
+  //     });
+  //   }, selectedDifficulty.wordSpawnRate);
+
+  //   return () => clearInterval(interval);
+  // }, [selectedDifficulty, isPaused, isGameOver]);
 
   useEffect(() => {
     let lastTimestamp = null;
@@ -103,6 +151,11 @@ export default function FallingBoxes() {
             </div> */}
             {box?.markedForRemoval && (
               <Flex
+                onAnimationEnd={() => {
+                  if (box.markedForRemoval) {
+                    submitCorrectWord({ removedBoxId: box.id, score: 100 });
+                  }
+                }}
                 position={"absolute"}
                 opacity={100}
                 fontWeight={700}

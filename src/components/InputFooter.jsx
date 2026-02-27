@@ -21,10 +21,10 @@ export default function InputFooter() {
     markBoxForRemoval(selectedBoxId);
 
     // Delay actual removal
-    setTimeout(() => {
-      removeBox(selectedBoxId);
-      addScore(100);
-    }, 300); // Duration matches CSS animation time
+    // setTimeout(() => {
+    //   removeBox(selectedBoxId);
+    //   addScore(100);
+    // }, 300); // Duration matches CSS animation time
   }
   useEffect(() => {
     const handleKeyDown = (e) => {

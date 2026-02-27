@@ -48,7 +48,7 @@ export const useGameStore = create((set, get) => ({
       const updatedBoxes = state.boxes.map((box) => {
         const newTop = box.top + box.velocity * deltaSeconds;
 
-        if (newTop >= maxTop) {
+        if (newTop >= maxTop && !box.markedForRemoval) {
           removedCount++;
           return null;
         }
@@ -66,6 +66,16 @@ export const useGameStore = create((set, get) => ({
         lives: Math.max(0, state.lives - removedCount),
       };
     }),
+  submitCorrectWord: (value) =>
+    set((state) => ({
+      boxes: state.boxes.filter((box) => box.id !== value.removedBoxId),
+      score: state.score + value.score,
+      selectedDifficulty: {
+        ...state.selectedDifficulty,
+        wordSpawnRate: state.selectedDifficulty.wordSpawnRate * 0.99,
+        wordVelocity: state.selectedDifficulty.wordVelocity * 0.995,
+      },
+    })),
   markBoxForRemoval: (boxId) =>
     set((state) => ({
       boxes: state.boxes.map((box) =>
